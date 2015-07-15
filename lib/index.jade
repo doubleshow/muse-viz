@@ -1,0 +1,95 @@
+head
+    link(href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css", rel="stylesheet")
+    link(href="https://cdnjs.cloudflare.com/ajax/libs/c3/0.4.10/c3.min.css" rel="stylesheet" type="text/css")
+    link(rel="stylesheet" href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css")
+    style.
+        input {
+            width: 60%;
+            font-size: 150%;
+        }
+        
+        body {
+            padding: 5px;
+        }
+body        
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js")
+    script(src="https://code.jquery.com/ui/1.11.3/jquery-ui.min.js")
+    script(src="http://d3js.org/d3.v3.min.js" charset="utf-8")
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/c3/0.4.10/c3.js")
+    script.
+        var charts = !{JSON.stringify(charts)}
+        var data = !{JSON.stringify(data)}
+    div.container
+        div.row
+            div.panel.panel-info
+                div.panel-heading 
+                    h3.panel-title Single method name                    
+                div.panel-body                        
+                    input#autocomplete(placeholder="setTag")                
+                    div#search
+
+            div.panel.panel-info
+                div.panel-heading 
+                    h3.panel-title Multiple method names
+                div.panel-body                        
+                    input#search-multiple-input(placeholder="setTag SQLException Future getColor")
+                    div#search-multiple
+                                                
+            each d, key in charts
+                div.panel.panel-info
+                    div.panel-heading 
+                        h3.panel-title= d.title
+                    div.panel-body                      
+                        div.chart(id=key)
+                script.
+                    c3.generate({
+                        bindto: '##{key}',
+                        data: {
+                          columns: charts['#{key}'].columns
+                        },
+                        tooltip: {
+                            grouped: false // Default true
+                        }
+                    })
+
+    script.
+    
+        $("#search-multiple-input").keypress(function(e){
+            if (e.keyCode == 13) {       
+                var code = e.target.value
+                
+                var columns = code.split(' ').map(function(key){                    
+                    return [key].concat(data.normalized[key])
+                })
+                                
+                c3.generate({
+                    bindto: '#search-multiple',
+                    data: {
+                      columns: columns
+                    },
+                    tooltip: {
+                        grouped: false // Default true
+                    }
+                })
+            }
+        })
+        
+        $( "#autocomplete" ).autocomplete({
+            source: !{JSON.stringify(_.keys(data.raw))},
+            minLength: 3,
+            select: function( event, ui ) {
+                console.log(event.target.value)
+                
+                var key = event.target.value
+                
+                c3.generate({
+                    bindto: '#search',
+                    data: {
+                      columns: [[key].concat(data.normalized[key])]
+                    },
+                    tooltip: {
+                        grouped: false // Default true
+                    }
+                })
+            }
+        });
