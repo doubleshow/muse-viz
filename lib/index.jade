@@ -49,7 +49,16 @@ body
                         },
                         tooltip: {
                             grouped: false // Default true
-                        }
+                        },
+                        axis: {                                
+                            y: {
+                                label: charts['#{key}'].label
+                            },                            
+                            x: {
+                                type: 'category',
+                                categories: !{JSON.stringify(xticks)}
+                            }
+                        }                        
                     })
 
     script.
@@ -69,7 +78,16 @@ body
                     },
                     tooltip: {
                         grouped: false // Default true
-                    }
+                    },
+                    axis: {                                
+                        y: {
+                            label: '%'
+                        },                            
+                        x: {
+                            type: 'category',
+                            categories: !{JSON.stringify(xticks)}
+                        }
+                    }                        
                 })
             }
         })
@@ -89,7 +107,16 @@ body
                     },
                     tooltip: {
                         grouped: false // Default true
-                    }
+                    },
+                    axis: {                                
+                        y: {
+                            label: '%'
+                        },                            
+                        x: {
+                            type: 'category',
+                            categories: !{JSON.stringify(xticks)}
+                        }
+                    }                    
                 })
             }
         });
